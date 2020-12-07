@@ -7,24 +7,24 @@
     <title>Sentiment Demo</title>
 </head>
 <body>
-<header>
-    <h1>Sentiment Demo</h1>
-</header>
-<div id="main">
-    <div>
+    <header>
+        <h1>Sentiment Demo</h1>
+    </header>
+    <div id="main">
         <form action="{{ url_for('index_page') }}" method=post class="form">
             <dl>
                 <dt>Введите/вставьте текст для оценки (на английском): <br>
-                <dd><textarea name=text rows=5 cols=40>{{ text }}</textarea>
+                <dd><textarea spellcheck="false" name=text rows=5 cols=40>{{ text }}</textarea>
                 <dd><input type=submit value="Оценить">
             </dl>
         </form>
+        <div class="response">
+            <span>Sentiment prediction:<span>
+            <div id="prediction_message">{{ prediction_message }}</div>  
+        </div>
     </div>
-    <div>
-        <h3>Sentiment prediction:<h3>
-        <div id="prediction_message">{{ prediction_message }}</div>  
-    </div>
-</div>
-
+    <footer>
+        
+    </footer>
 </body>
 
