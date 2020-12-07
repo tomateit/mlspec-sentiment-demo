@@ -14,7 +14,7 @@
         <form action="{{ url_for('index_page') }}" method=post class="form">
             <dl>
                 <dt>Введите/вставьте текст для оценки (на английском): <br>
-                <dd><textarea spellcheck="false" name=text rows=5 cols=40>{{ text }}</textarea>
+                <dd><textarea spellcheck="false" name=text rows=5 cols=40 placeholder="Пожалуйста, введите текст">{{ text }}</textarea>
                 <dd><input type=submit value="Оценить">
             </dl>
         </form>

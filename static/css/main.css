@@ -7,7 +7,7 @@
     --emerald500: #10b77f;
     --emerald900: #05382b;
 }
-h1, body, dl, dt, dd {
+h1, body, dl, dt, dd, p {
     margin: 0;
     padding: 0;
 }
@@ -103,4 +103,5 @@ body footer {
 
 body footer * {
     color: grey;
+    font-size: 0.75rem;
 }

@@ -19,7 +19,7 @@ def index_page(text="", prediction_message=""):
         prediction_message = classifier.get_prediction_message(text)
         return render_template('index.html', text=text, prediction_message=prediction_message)
     else:
-        return render_template('index.html', text="Пожалуйста, введите текст", prediction_message="Добро пожаловать!")
+        return render_template('index.html', text="", prediction_message="Добро пожаловать!")
     
 
 
