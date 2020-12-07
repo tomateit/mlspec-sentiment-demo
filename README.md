@@ -8,3 +8,8 @@
 4. Выполните `python3 app.py` из директории проекта. Страница будет находиться по адресу http://127.0.0.1:5000/
 
 *Вы можете обнаружить запушенную на Heroku версию по адресу:* https://mlspec-demo.herokuapp.com/
+
+
+Credits:
++ Фоновая иллюстрация, автор: Tom Honz https://www.deviantart.com/merl1ncz
++ Дизайн и вёрстка: https://github.com/IThoughtYouKnow
