@@ -7,7 +7,7 @@
     --emerald500: #10b77f;
     --emerald900: #05382b;
 }
-h1, body, dl, dt, dd, p {
+h1, h2, h3, h4, body, dl, dt, dd, p {
     margin: 0;
     padding: 0;
 }
@@ -92,7 +92,36 @@ body #main .response > span {
     padding: 2rem;
     font-size: 2rem;
 }
-body #main .response #prediction_message {
+/* body #main .response a > * {
+    margin-left: 0.5rem;
+} */
+
+
+
+body #main .menu-block {
+    margin-top: 2rem;
+    background-color: var(--darkgray);
+    border: solid 1px gray;
+    padding: 2rem;
+}
+body #main .menu-block a {
+    text-decoration: none;
+}
+body #main .menu-block a h3 {
+    font-size: 1.5rem;
+    color: hsla(216,33%,97%);
+    text-decoration: none;
+}
+body #main .menu-block a p {
+    color: hsla(216,33%,97%);
+    font-size: 1.2rem;
+    text-decoration: none;
+    
+}
+
+
+
+body #main .menu-block #prediction_message {
     margin-left: 0.5rem;
 }
 
