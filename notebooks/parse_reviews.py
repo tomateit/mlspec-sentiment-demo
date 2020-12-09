@@ -4,6 +4,7 @@ import sqlite3
 import time
 import random
 import re
+from tqdm import tqdm 
 
 regexp_catalog_id = re.compile(r"(?:_)\d{5,20}(?:-catalog)")
 regexp_digits = re.compile(r"(?:\D*)(\d{5,20})(?:\D*)")
@@ -57,7 +58,7 @@ class Parser():
         if not cids:
             cids = self._get_all_catalog_ids()
 
-        for cid in cids:
+        for cid in tqdm(cids):
             try_pages = True
             page_increment = 1
             while (try_pages):
@@ -86,7 +87,7 @@ class Parser():
             print("exception occured")
             return False
     
-    def _extract_reviews_from_data(self,data):
+    def _extract_reviews_from_data(self, data):
         for rev in data:
             text_ = {}
             for t in rev['text']:
@@ -94,11 +95,13 @@ class Parser():
             
             label = "pos" if rev["vote_type"] == "positive" else "neg"
             # я буду отдавать позитивной части отзыва если он положительный и негативной - если отрицательный
+            # не буду - базовые метки очень плохие
             # if (label=="pos"):
             #     text = f"{text_['Плюсы']} {text_['Впечатления']}"
             # else:
             #     text = f"{text_['Минусы']} {text_['Впечатления']}"
-            text = f"{text_['Плюсы']}. {text_['Минусы']}. {text_['Впечатления']}."
+            # text = f"{text_['Плюсы']}. {text_['Минусы']}. {text_['Впечатления']}."
+            text = f"Плюсы: {text_['Плюсы']}. Минусы: {text_['Минусы']}. Впечатления: {text_['Впечатления']}."
     #         print(label, text)
             self._push_review_to_db(text, label)
 
@@ -111,5 +114,10 @@ class Parser():
 
 
 if __name__ == "__main__":
-    _p = Parser()
-    _p.main()
+    try:
+        _p = Parser()
+        _p.main()
+    except Exception e:
+        print(e)
+    finally:
+        _p.conn.close()
