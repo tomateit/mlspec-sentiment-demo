@@ -25,7 +25,7 @@ class SentimentClassifierEN(object):
             sent_class = self.model.predict([text])[0]
             probability = self.model.predict_proba([text])[0].max()
             return (sent_class, probability)
-        except:
+        except Exception as e:
             print("prediction error")
             return -1, 0.8
 
@@ -60,8 +60,9 @@ class SentimentClassifierRU(object):
             #probability = self.model.predict_proba([text])[0].max()
             return sent_class
             #return (sent_class, probability)
-        except:
+        except Exception as e:
             print("prediction error")
+            print(e)
             #return -1, 0.8
             return -1
 
