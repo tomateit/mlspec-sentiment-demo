@@ -1,11 +1,13 @@
 import pickle
 import dill
 import logging
-from abc import abstracmethod, ABCMeta
+from abc import abstractmethod, ABCMeta
 from .preprocessing import preprocess_ru, preprocess_en
+import os
+
 
 class IPredictor(metaclass=ABCMeta):
-    @abstracmethod
+    @abstractmethod
     def _preprocess_input(self, incoming_text: str):
         """First we preprocess input text"""
         raise NotImplemented
@@ -15,15 +17,16 @@ class IPredictor(metaclass=ABCMeta):
         Second we get predict class and probability of belonging the text to positive (1) class.
         Model will be called predict_proba attribute, and if it has not got one, then score will be assigned -1 
         """
-        classname = self.model.predict(preprocessed_input)
+        classname = self.model.predict(preprocessed_input)[0]
         if hasattr(self.model, "predict_proba"):
-            score = .predict_proba(preprocessed_input)
+            score = self.model.predict_proba(preprocessed_input)[0]
         else:
             score = -1.
+        print(f"Predicted sentimen class {classname} with certainity {score}")
         return (classname, score)
         
 
-    @abstracmethod
+    @abstractmethod
     def _get_human_readable_interpretation(self, classname: int, score: float) -> str:
         """Sentiment score can be converted to a word"""
         raise NotImplemented
@@ -35,7 +38,7 @@ class IPredictor(metaclass=ABCMeta):
         message = self._get_human_readable_interpretation(classname, score)
         return message
 
-    @abstracmethod
+    @abstractmethod
     def get_prediction(self, incoming_text: str) -> str:
         """Class shall implement exception-aware variant of _get_prediction"""
         raise NotImplemented
@@ -43,7 +46,7 @@ class IPredictor(metaclass=ABCMeta):
 
 class SentimentClassifierEN(IPredictor):
     def __init__(self):
-        with open("./SentimentModelEN.pkl", "rb") as mfile:
+        with open(os.path.join(os.path.dirname(__file__), "SentimentModelEN.pkl"), "rb") as mfile:
             self.model = pickle.load(mfile)
         self.classnames = {0: "negative", 1: "positive"}
 
@@ -56,13 +59,13 @@ class SentimentClassifierEN(IPredictor):
         _prob = round(score, 2)
         _classname = self.classnames.get(classname, "Impossible class")
         if score == -1:
-            return _classname
+            return " " + _classname
         if score < 0.55:
-            return f"neutral or uncertain ({_prob}) {_classname}"
+            return f" neutral or uncertain ({_prob}) {_classname}"
         if score < 0.7:
-            return f"probably ({_prob}) {_classname}"
+            return f" probably ({_prob}) {_classname}"
         if score > 0.95:
-            return f"certain ({_prob}) {_classname}"
+            return f" certain ({_prob}) {_classname}"
         else:
             raise Exception("Impossible state")
 
@@ -78,22 +81,25 @@ class SentimentClassifierEN(IPredictor):
 
 class SentimentClassifierRU(IPredictor):
     def __init__(self):
-        with open("./SentimentModelEN.pkl", "rb") as mfile:
+        with open(os.path.join(os.path.dirname(__file__), "SentimentModelRU.pkl"), "rb") as mfile:
             self.model = pickle.load(mfile)
         self.classnames = {0: "негативный", 1: "позитивный"}
 
+    def _preprocess_input(self, incoming_text: str):
+        """First we preprocess input text"""
+        return preprocess_ru(incoming_text)
 
     def _get_human_readable_interpretation(self, classname: int, score: float) -> str:
         _prob = round(score, 2)
         _classname = self.classnames.get(classname, "[Неподдерживаемый класс]")
         if score == -1:
-            return _classname
+            return " " + _classname
         if score < 0.55:
-            return f"с небольшой вероятностью ({_prob}) {_classname}"
+            return f" с небольшой вероятностью ({_prob}) {_classname}"
         if score < 0.7:
-            return f"возможно ({_prob}) {_classname}"
+            return f" возможно ({_prob}) {_classname}"
         if score > 0.95:
-            return f"наиболее вероятно ({_prob}) {_classname}"
+            return f" наиболее вероятно ({_prob}) {_classname}"
         else:
             raise Exception("Impossible state")
 

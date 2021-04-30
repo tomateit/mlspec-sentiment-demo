@@ -1,5 +1,5 @@
 from flask import Flask
-from .models.sentiment_classifier import SentimentClassifierEN, SentimentClassifierRU
+from models.sentiment_classifier import SentimentClassifierEN, SentimentClassifierRU
 from flask import Flask, render_template, request
 import time 
 
