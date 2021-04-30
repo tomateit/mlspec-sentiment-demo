@@ -16,10 +16,11 @@ class IPredictor(metaclass=ABCMeta):
         Model will be called predict_proba attribute, and if it has not got one, then score will be assigned -1 
         """
         classname = self.model.predict(preprocessed_input)
-        try:
-            score = self.model.predict_proba(preprocessed_input)
-        except AttributeError:
-            score = -1
+        if hasattr(self.model, "predict_proba"):
+            score = .predict_proba(preprocessed_input)
+        else:
+            score = -1.
+        return (classname, score)
         
 
     @abstracmethod
@@ -84,7 +85,7 @@ class SentimentClassifierRU(IPredictor):
 
     def _get_human_readable_interpretation(self, classname: int, score: float) -> str:
         _prob = round(score, 2)
-        _classname = self.classnames.get(classname, "Impossible class")
+        _classname = self.classnames.get(classname, "[Неподдерживаемый класс]")
         if score == -1:
             return _classname
         if score < 0.55:
