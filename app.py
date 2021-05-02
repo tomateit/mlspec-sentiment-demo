@@ -1,5 +1,6 @@
 from flask import Flask
-from models.sentiment_classifier import SentimentClassifierEN, SentimentClassifierRU
+from models.model1_en.Classifier import Classifier as ClassifierEN1
+from models.model2_ru.Classifier import Classifier as ClassifierRU1
 from flask import Flask, render_template, request
 import time 
 
@@ -7,8 +8,8 @@ app = Flask(__name__)
 
 print( "Preparing classifiers")
 start_time = time.time()
-classifier_ru = SentimentClassifierRU()
-classifier_en = SentimentClassifierEN()
+classifier_ru = ClassifierRU1()
+classifier_en = ClassifierEN1()
 print( f"Classifiers are ready in {time.time() - start_time} seconds")
 
 @app.route("/", methods=["GET"])
@@ -62,6 +63,32 @@ def demo2(text="", prediction_message=""):
             description=description,
             demo="demo2"
             )
+
+# @app.route("/sentiment-demo3", methods=["POST", "GET"])
+# def demo3(text="", prediction_message=""):
+#     title = "Sentiment demo 3"
+#     description = "FILL IN"
+#     if request.method == "POST":
+#         text = request.form["text"]
+#         print(text)
+#         prediction_message = classifier_ru.get_prediction(text)
+#         return render_template('demo.html', 
+#             text=text, 
+#             prediction_message=prediction_message,
+#             title=title,
+#             description=description,
+#             demo="demo3"
+#         )
+#     else:
+#         return render_template('demo.html', 
+#             text="", 
+#             prediction_message="Добро пожаловать!",
+#             title=title,
+#             description=description,
+#             demo="demo3"
+#             )
+
+
 # @app.route("/sentiment-demo", methods=["POST", "GET"])
 # def index_page(text="", prediction_message=""):
 #     if request.method == "POST":
@@ -79,4 +106,4 @@ def demo2(text="", prediction_message=""):
 
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    app.run(port=5006, debug=True)

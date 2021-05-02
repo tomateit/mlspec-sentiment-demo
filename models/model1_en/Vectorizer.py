@@ -1,29 +1,29 @@
+from ..AbstractVectorizer import AbstractVectorizer
+from typing import List
 from sklearn.base import TransformerMixin, BaseEstimator
 from sklearn.feature_extraction.text import TfidfVectorizer
 import re
 import html
 import dill
 
-with open("./VectorizerRU.pkl", "rb") as fin:
-    vectorizer_ru = dill.load(fin)
 
-# ! WRONG FILENAME
-with open("./VectorizerRU.pkl", "rb") as fin:
-    vectorizer_en = dill.load(fin)
+class Vectorizer(AbstractVectorizer):
 
+    __model = None
 
-class DummyPreprocessor(TransformerMixin):
     def __init__(self):
-        pass
-    
-    def fit_transform(self, data, y=None):
-        return data
-    
-    def transform(self, data, y=None):
-        return data
-    
-    def fit(self, data, y=None):
-        return data
+        if (self.__model):
+            with open(os.path.join(os.path.dirname(__file__), "Vectorizer.pkl"), "rb") as fin:
+                self.__model = dill.load(fin)
+
+    def _preprocess_input(self, incoming_text: str) -> List[str]:
+        """Preprocess input text"""
+        return RoughPreprocessor().fit_transform([incoming_text])
+
+    def _vectorize_input(self, preprocessed_text: List[str]):
+        """Vectorize text accordingly to expected classifier input"""
+        return self.__model.transform(preprocessed_text)
+
 
 
 class RoughPreprocessor(TransformerMixin):
@@ -54,14 +54,3 @@ class RoughPreprocessor(TransformerMixin):
     def transform(self, data, y=None):
         return self.fit_transform(data) 
 
-def preprocess_ru(text: str):
-    preprocessed = RoughPreprocessor().fit_transform([text])
-    # print(preprocessed)
-    vectorized = vectorizer_ru.transform(preprocessed)
-    # print(vectorized)
-    return vectorized
-
-def preprocess_en(text: str):
-    preprocessed = RoughPreprocessor().fit_transform([text])
-    vectorized = vectorizer_ru.transform(preprocessed)
-    return vectorized
