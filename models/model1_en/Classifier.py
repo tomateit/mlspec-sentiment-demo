@@ -24,7 +24,7 @@ class Classifier(AbstractClassifier):
             return f" neutral or uncertain ({_prob}) {_classname}"
         if score < 0.7:
             return f" probably ({_prob}) {_classname}"
-        if score > 0.95:
+        if score < 1:
             return f" certain ({_prob}) {_classname}"
         else:
             raise Exception("Impossible state")
