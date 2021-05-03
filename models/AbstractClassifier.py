@@ -13,7 +13,7 @@ class AbstractClassifier(metaclass=ABCMeta):
         """
         classname = self.model.predict(preprocessed_input)[0]
         if hasattr(self.model, "predict_proba"):
-            score = self.model.predict_proba(preprocessed_input)[0]
+            score = self.model.predict_proba(preprocessed_input)[0][classname] # default format is np([[prob0, prob1]])
         else:
             score = -1.
         print(f"Predicted sentimen class {classname} with certainity {score}")
