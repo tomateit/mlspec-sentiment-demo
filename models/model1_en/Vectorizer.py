@@ -8,13 +8,16 @@ import dill
 
 
 class Vectorizer(AbstractVectorizer):
-
+    __instance = None
     __model = None
-
-    def __init__(self):
-        if (self.__model):
+    def __new__(cls):
+        if cls.__instance is None:
             with open(os.path.join(os.path.dirname(__file__), "Vectorizer.pkl"), "rb") as fin:
-                self.__model = dill.load(fin)
+                cls.__model = dill.load(fin)
+            cls.__instance = super(Vectorizer, cls).__new__(cls)
+        return cls.__instance
+
+            
 
     def _preprocess_input(self, incoming_text: str) -> List[str]:
         """Preprocess input text"""

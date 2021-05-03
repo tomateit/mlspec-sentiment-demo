@@ -22,13 +22,16 @@ class DummyPreprocessor(TransformerMixin):
         return data
 
 class Vectorizer(AbstractVectorizer):
-
+    __instance = None
     __model = None
 
-    def __init__(self):
-        if self.__model is None:
+    def __new__(cls):
+        if cls.__instance is None:
             with open(os.path.join(os.path.dirname(__file__), "Vectorizer.pkl"), "rb") as fin:
-                self.__model = dill.load(fin)
+                print("Загружаю векторайзер для ру")
+                cls.__model = dill.load(fin)
+            cls.__instance = super(Vectorizer, cls).__new__(cls)
+        return cls.__instance
 
     def _preprocess_input(self, incoming_text: str) -> List[str]:
         """Preprocess input text"""
@@ -38,8 +41,7 @@ class Vectorizer(AbstractVectorizer):
         """Vectorize text accordingly to expected classifier input"""
         return self.__model.transform(preprocessed_text)
 
-    def vectorize_input(self, incoming_text: str):
-        return self._vectorize_input(self._preprocess_input(incoming_text))
+    
             
 
 
