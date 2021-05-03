@@ -3,6 +3,7 @@ from models.model1_en.Classifier import Classifier as ClassifierEN1
 from models.model2_ru.Classifier import Classifier as ClassifierRU1
 from flask import Flask, render_template, request
 import time 
+import os
 
 app = Flask(__name__)
 
@@ -106,4 +107,8 @@ def demo2(text="", prediction_message=""):
 
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    PORT = os.environ.get("PORT", None)
+    if PORT:
+        app.run(port=PORT, debug=True)
+    else:
+        app.run(debug=False)
