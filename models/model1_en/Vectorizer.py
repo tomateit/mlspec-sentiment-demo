@@ -5,7 +5,7 @@ from sklearn.feature_extraction.text import TfidfVectorizer
 import re
 import html
 import dill
-
+import os
 
 class Vectorizer(AbstractVectorizer):
     __instance = None
