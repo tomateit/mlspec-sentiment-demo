@@ -3,4 +3,5 @@ __pycache__
 *.db
 *.csv
 .ipynb_checkpoints
-.vscode
+.vscode/
+.vscode/settings.json
