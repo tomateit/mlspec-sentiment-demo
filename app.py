@@ -1,6 +1,7 @@
 from flask import Flask
 from models.model1_en.Classifier import Classifier as ClassifierEN1
 from models.model2_ru.Classifier import Classifier as ClassifierRU1
+from models.model5tl_en.Classifier import Classifier as ClassifierEN5
 from flask import Flask, render_template, request
 import time 
 import os
@@ -9,8 +10,9 @@ app = Flask(__name__)
 
 print( "Preparing classifiers")
 start_time = time.time()
-classifier_ru = ClassifierRU1()
-classifier_en = ClassifierEN1()
+classifier_ru1 = ClassifierRU1()
+classifier_en1 = ClassifierEN1()
+classifier_en5 = ClassifierEN5()
 print( f"Classifiers are ready in {time.time() - start_time} seconds")
 
 @app.route("/", methods=["GET"])
@@ -89,6 +91,29 @@ def demo2(text="", prediction_message=""):
 #             demo="demo3"
 #             )
 
+@app.route("/sentiment-demo5", methods=["POST", "GET"])
+def demo5(text="", prediction_message=""):
+    title = "Sentiment demo 5"
+    description = "Это - пятая модель из серии. На этот раз - используем transfer learning. Предтренированный distilBERT должен справляться просто отлично"
+    if request.method == "POST":
+        text = request.form["text"]
+        print(text)
+        prediction_message = classifier_en5.get_prediction(text)
+        return render_template('demo.html', 
+            text=text, 
+            prediction_message=prediction_message,
+            title=title,
+            description=description,
+            demo="demo5"
+        )
+    else:
+        return render_template('demo.html', 
+            text="", 
+            prediction_message="Добро пожаловать!",
+            title=title,
+            description=description,
+            demo="demo5"
+            )
 
 # @app.route("/sentiment-demo", methods=["POST", "GET"])
 # def index_page(text="", prediction_message=""):
